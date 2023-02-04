@@ -1,0 +1,17 @@
+ROUTES: //do not redirect to POST.
+
+api/login - post(login,pass)<-(OK+UID/fail) //login with log + pass
+api/register - post(login,pass)<-(OK+UID/USED/PASS_NOT_OK) //register new user with log + pass
+api/users/me - get()<-(login/pass/nickname) // receive UID user data
+api/users/me - put(nickname/pass)<-(OK+new_nickname / NOT_OK+old_nickname)
+api/rooms - get()<-(rooms list) | post(roomName/roomPass)<-(OK+roomId/NOT_OK) - create room with name. Get back Room ID.
+api/rooms/RID - post(roomPass)<-(OK+"Server: UID.nickname joined chat")
+api/rooms/RID/messages - get()<-(OK+message list) | post(message)<-(OK)
+api/rooms/exit - get()
+api/users/logout - get()
+
+
+
+api/rooms/RID/users - 
+api/rooms/RID/users/UID - 
+
