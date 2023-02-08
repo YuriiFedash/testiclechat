@@ -13,7 +13,7 @@ function newUser(body) {
 async function loginExists(login) {
   const data = await User.findOne({ login });
 
-  return data !== null;
+  return Boolean(data);
 
   // { _id: null }
 }
