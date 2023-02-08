@@ -1,37 +1,43 @@
-const User = require("../models/user");
+import logger from "pino";
 
-const register = async (userData) => {
-  const user = newUser(userData);
-  const loginFound = await loginExists(userData.login);
-  if (loginFound == true) {
-    throw Error("such credentials are already in-use");
-  }
-  const userCreated = await saveNewUser(user);
-  return userCreated;
-  //throw Error("Error, could not create user. Try again later");
-};
+import User from "../models/user.js";
 
-const newUser = (body) => {
-  const user = new User({
+function newUser(body) {
+  return new User({
     login: body.login,
     password: body.password,
     nickname: body.nickname,
   });
-  return user;
-};
-const loginExists = async (login) => {
-  const data = await User.findOne({ login: login });
-  if (data == null) {
-    return false;
-  }
-  return true; //{ _id: null }
-};
+}
 
-const saveNewUser = async (user) => {
+async function loginExists(login) {
+  const data = await User.findOne({ login });
+
+  return data !== null;
+
+  // { _id: null }
+}
+
+async function saveNewUser(user) {
   const save = await user.save();
-  console.log("new user saved", save);
-  console.log(await loginExists(user.login));
-  return loginExists(user.login);
-};
 
-module.exports = { register };
+  logger().info("new user saved", save);
+  logger().info(await loginExists(user.login));
+
+  return loginExists(user.login);
+}
+
+async function register(userData) {
+  const user = newUser(userData);
+  const loginFound = await loginExists(userData.login);
+
+  if (loginFound === true) {
+    throw new Error("such credentials are already in-use");
+  }
+
+  return saveNewUser(user);
+
+  // throw Error("Error, could not create user. Try again later");
+}
+
+export default register;

@@ -1,0 +1,14 @@
+{
+  "extends": ["hardcore", "hardcore/node"],
+  "env": {
+    "browser": false
+  },
+  "rules": {
+    "node/no-unpublished-import": [
+      "error",
+      {
+        "allowModules": ["mockingoose"]
+      }
+    ]
+  }
+}
